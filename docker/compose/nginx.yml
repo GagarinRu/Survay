@@ -1,0 +1,21 @@
+services:
+  survay_nginx:
+      image: nginx:alpine
+      container_name: survay_service.nginx
+      hostname: survay_service.nginx
+      restart: unless-stopped
+      build:
+        context: ../nginx
+        dockerfile: Dockerfile
+      expose:
+        - "${NGINX_PORT}"
+      ports:
+        - "${NGINX_PORT}:${NGINX_PORT}"
+      depends_on:
+        - survay_app
+      env_file:
+      - ../../.env
+      volumes:
+        - survay_service_static_data:/app/static
+      networks:
+        - survay_service.network

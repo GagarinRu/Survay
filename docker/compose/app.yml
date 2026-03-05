@@ -1,0 +1,43 @@
+services:
+  survay_app:
+    container_name: survay_service.survay_app
+    hostname: survay_service.survay_app
+    build:
+      context: ../../apps
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${APP_GUVICORN_PORT}:${APP_GUVICORN_PORT}"
+    depends_on:
+      survay_db:
+        condition: service_healthy
+      survay_redis:
+        condition: service_healthy
+    volumes:
+      - ../../apps/src:/app/src:cached
+      - survay_service_static_data:/app/static
+    env_file:
+      - ../../.env
+    environment:
+      - SERVICE_TYPE=app
+    networks:
+      - survay_service.network
+
+  survay_db_migration:
+    container_name: survay_service.db_migration
+    hostname: survay_service.db_migration
+    build:
+      context: ../../apps
+      dockerfile: Dockerfile
+    restart: on-failure
+    depends_on:
+      survay_db:
+        condition: service_healthy
+    volumes:
+      - ../../apps/src:/app
+    env_file:
+      - ../../.env
+    environment:
+      - SERVICE_TYPE=migration
+    networks:
+      - survay_service.network

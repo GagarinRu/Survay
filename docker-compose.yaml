@@ -1,0 +1,19 @@
+name: survay_service
+
+include:
+  - docker/compose/app.yml
+  - docker/compose/db.yml
+  - docker/compose/nginx.yml
+  - docker/compose/redis.yml
+
+networks:
+  survay_service.network:
+    name: survay_service.network
+
+volumes:
+  survay_service_postgres_data:
+    name: survay_service_postgres_data
+  survay_service_static_data:
+    name: survay_service_static_data
+  survay_service_redis_data:
+    name: survay_service_redis_data

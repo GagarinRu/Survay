@@ -1,0 +1,22 @@
+services:
+  survay_db:
+      container_name: survay_service.db
+      hostname: survay_service.db
+      image: postgres:17.6
+      restart: unless-stopped
+      env_file:
+        - ../../.env
+      expose:
+        - "${POSTGRES_PORT}"
+      ports:
+        - "127.0.0.1:${POSTGRES_PORT}:${POSTGRES_PORT}"
+      volumes:
+        - survay_service_postgres_data:/var/lib/postgresql/data
+      healthcheck:
+        test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+        start_period: 30s
+      networks:
+        - survay_service.network
