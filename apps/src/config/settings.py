@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(BASE_DIR / ".env")
+load_dotenv(BASE_DIR.parent.parent / ".env")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "drf_spectacular",
     "corsheaders",
+    "survays",
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,31 @@ CSRF_TRUSTED_ORIGINS = [
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10_240_000
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10_240_000
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "TIME_FORMAT": "%H:%M:%S",
+    "TIME_INPUT_FORMATS": ["%H:%M:%S", "%H:%M"],
+}
+SPECTACULAR_SETTINGS = {
+    "TITLE": "API приложения Опрос",
+    "DESCRIPTION": "Полная документация API приложения Куда Угодно",
+    "VERSION": "0.3.1",
+    "SCHEMA_PATH_PREFIX": r"/api/v[0-9]",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
+    "TYPESCRIPT_GENERATOR": {"TYPED_PATH_PARAMETERS": True},
+    "SORT_OPERATIONS": True,
+    "SORT_OPERATION_PARAMETERS": False,
+    "SWAGGER_UI_SETTINGS": {
+        "defaultModelsExpandDepth": -1,
+    },
+}

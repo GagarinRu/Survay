@@ -11,8 +11,6 @@ services:
     depends_on:
       survay_db:
         condition: service_healthy
-      survay_redis:
-        condition: service_healthy
     volumes:
       - ../../apps/src:/app/src:cached
       - survay_service_static_data:/app/static

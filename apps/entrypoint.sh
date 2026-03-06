@@ -51,6 +51,9 @@ case "$SERVICE_TYPE" in
     echo "Применение миграций"
     python3 manage.py migrate --noinput
 
+    echo "Создание суперпользователя"
+    python3 manage.py csu
+
     echo "Старт Gunicorn"
     exec gunicorn config.wsgi:application \
         --bind "${APP_GUVICORN_HOST}:${APP_GUVICORN_PORT}" \
